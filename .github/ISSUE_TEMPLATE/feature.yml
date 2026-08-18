@@ -2,7 +2,7 @@ name: Feature
 description: A new capability originating from the project plan
 title: 'feat: '
 labels: ["type:feat", "status:backlog"]
-projects: []
+projects: ["gillella/6"]
 body:
   - type: textarea
     id: summary

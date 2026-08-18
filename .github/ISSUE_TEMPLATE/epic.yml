@@ -2,7 +2,7 @@ name: Epic
 description: A phase-level container; not directly implementable
 title: 'epic: '
 labels: ["type:epic", "status:backlog"]
-projects: []
+projects: ["gillella/6"]
 body:
   - type: textarea
     id: phase

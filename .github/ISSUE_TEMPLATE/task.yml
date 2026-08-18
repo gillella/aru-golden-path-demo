@@ -2,7 +2,7 @@ name: Task
 description: Tooling, CI, specification, or maintenance work
 title: 'chore: '
 labels: ["type:chore", "status:backlog"]
-projects: []
+projects: ["gillella/6"]
 body:
   - type: textarea
     id: summary

@@ -2,7 +2,7 @@ name: Research
 description: Bounded research question with a cited findings artifact
 title: 'research: '
 labels: ["type:research", "status:backlog"]
-projects: []
+projects: ["gillella/6"]
 body:
   - type: textarea
     id: question

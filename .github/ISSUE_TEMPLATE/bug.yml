@@ -2,7 +2,7 @@ name: Bug
 description: Something behaves incorrectly
 title: 'fix: '
 labels: ["type:fix", "status:backlog"]
-projects: []
+projects: ["gillella/6"]
 body:
   - type: textarea
     id: observed
