@@ -1,0 +1,41 @@
+name: Epic
+description: A phase-level container; not directly implementable
+title: 'epic: '
+labels: ["type:epic", "status:backlog"]
+projects: []
+body:
+  - type: textarea
+    id: phase
+    attributes:
+      label: Phase
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+    validations:
+      required: true
+  - type: textarea
+    id: gating
+    attributes:
+      label: Gating contract
+    validations:
+      required: true
+  - type: textarea
+    id: children
+    attributes:
+      label: Child issues
+    validations:
+      required: true
+  - type: textarea
+    id: workflow-metadata
+    attributes:
+      label: Workflow metadata
+      description: Declare dependencies and every path this issue may modify.
+      value: |
+        depends-on:
+        touches:
+        parallel-eligible: false
+    validations:
+      required: true

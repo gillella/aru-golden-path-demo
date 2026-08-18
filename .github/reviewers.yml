@@ -1,0 +1,10 @@
+# Model-routed reviewer configuration
+version: 1
+reviewers:
+  default:
+    model: claude-3-5-sonnet
+    degrade_to_notice: true
+  routing:
+    anthropic: openai
+    openai: anthropic
+    google: anthropic

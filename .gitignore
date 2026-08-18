@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+dist/
+build/
+
+# Worktrees & Temporary Logs
+.worktrees/
+*.log
+.DS_Store
+
+# Secrets
+.env
+.env.*
+!.env.example

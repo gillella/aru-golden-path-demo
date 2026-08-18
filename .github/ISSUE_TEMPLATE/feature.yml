@@ -1,0 +1,41 @@
+name: Feature
+description: A new capability originating from the project plan
+title: 'feat: '
+labels: ["type:feat", "status:backlog"]
+projects: []
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+    validations:
+      required: true
+  - type: textarea
+    id: background
+    attributes:
+      label: Background
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+    validations:
+      required: true
+  - type: textarea
+    id: workflow-metadata
+    attributes:
+      label: Workflow metadata
+      description: Declare dependencies and every path this issue may modify.
+      value: |
+        depends-on:
+        touches:
+        parallel-eligible: false
+    validations:
+      required: true

@@ -1,0 +1,35 @@
+name: Task
+description: Tooling, CI, specification, or maintenance work
+title: 'chore: '
+labels: ["type:chore", "status:backlog"]
+projects: []
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+    validations:
+      required: true
+  - type: textarea
+    id: workflow-metadata
+    attributes:
+      label: Workflow metadata
+      description: Declare dependencies and every path this issue may modify.
+      value: |
+        depends-on:
+        touches:
+        parallel-eligible: false
+    validations:
+      required: true

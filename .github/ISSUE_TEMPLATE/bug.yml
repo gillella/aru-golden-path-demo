@@ -1,0 +1,41 @@
+name: Bug
+description: Something behaves incorrectly
+title: 'fix: '
+labels: ["type:fix", "status:backlog"]
+projects: []
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+    validations:
+      required: true
+  - type: textarea
+    id: workflow-metadata
+    attributes:
+      label: Workflow metadata
+      description: Declare dependencies and every path this issue may modify.
+      value: |
+        depends-on:
+        touches:
+        parallel-eligible: false
+    validations:
+      required: true
