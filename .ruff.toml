@@ -1,0 +1,5 @@
+# Keep the generated parser byte-identical to Factory dadf1c1. These two
+# modernization rules do not change its path-validation behavior; all other
+# default Ruff checks still apply, including to this file.
+[lint.per-file-ignores]
+".aru/lib/touches.py" = ["UP035", "FURB188"]

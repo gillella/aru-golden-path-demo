@@ -18,8 +18,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 DEFAULT_TIMEOUT_SECONDS = 15.0
 DEFAULT_MAX_RETRIES = 4
@@ -40,17 +39,17 @@ class SmokeOutcome:
     status_code: int
     url: str
     message: str
-    scenario_results: List[ScenarioResult]
+    scenario_results: list[ScenarioResult]
 
 
-def is_truthy(val: Optional[str]) -> bool:
+def is_truthy(val: str | None) -> bool:
     """Return True if string represents a truthy boolean value."""
     if val is None:
         return False
     return str(val).strip().lower() in ("true", "1", "yes", "y")
 
 
-def is_falsy(val: Optional[str]) -> bool:
+def is_falsy(val: str | None) -> bool:
     """Return True if string represents a falsy boolean value."""
     if val is None:
         return False
@@ -90,7 +89,7 @@ DEFAULT_SCENARIO_PATHS = [
 ]
 
 
-def load_and_validate_scenarios(scenarios_file: Optional[str] = None) -> Tuple[bool, Optional[List[Dict[str, Any]]], str]:
+def load_and_validate_scenarios(scenarios_file: str | None = None) -> tuple[bool, list[dict[str, Any]] | None, str]:
     """Load and validate scenario definitions. Fails closed if file is requested but invalid."""
     target_file = scenarios_file
     if not target_file:
@@ -109,7 +108,7 @@ def load_and_validate_scenarios(scenarios_file: Optional[str] = None) -> Tuple[b
     try:
         with open(path_obj, "r", encoding="utf-8") as f:
             data = json.load(f)
-    except Exception as exc:
+    except (OSError, ValueError, RecursionError, MemoryError) as exc:
         return False, None, f"Failed to parse scenarios JSON from '{target_file}': {exc}"
 
     if not isinstance(data, list):
@@ -146,9 +145,9 @@ def load_and_validate_scenarios(scenarios_file: Optional[str] = None) -> Tuple[b
     return True, data, ""
 
 
-def evaluate_html_scenarios(html_content: str, scenarios: Optional[List[Dict[str, Any]]] = None) -> List[ScenarioResult]:
+def evaluate_html_scenarios(html_content: str, scenarios: list[dict[str, Any]] | None = None) -> list[ScenarioResult]:
     """Evaluate acceptance criteria scenarios against preview HTML content."""
-    results: List[ScenarioResult] = []
+    results: list[ScenarioResult] = []
 
     # 1. Base structural integrity scenario
     has_html_tag = bool(re.search(r"<!DOCTYPE\s+html|<html[\s>]", html_content, re.IGNORECASE))
@@ -229,7 +228,7 @@ def fetch_preview_with_retry(
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     max_retries: int = DEFAULT_MAX_RETRIES,
     backoff_factor: float = DEFAULT_BACKOFF_FACTOR,
-) -> Tuple[int, Dict[str, str], str, str]:
+) -> tuple[int, dict[str, str], str, str]:
     """Fetch URL with retries to account for CDN propagation delay.
 
     Returns (status_code, headers_dict, body_text, error_message).
@@ -276,11 +275,11 @@ def fetch_preview_with_retry(
 
 
 def run_smoke_check(
-    url: Optional[str] = None,
-    has_preview: Optional[str] = None,
-    is_library: Optional[str] = None,
-    commit_sha: Optional[str] = None,
-    scenarios_file: Optional[str] = None,
+    url: str | None = None,
+    has_preview: str | None = None,
+    is_library: str | None = None,
+    commit_sha: str | None = None,
+    scenarios_file: str | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     max_retries: int = DEFAULT_MAX_RETRIES,
 ) -> SmokeOutcome:
@@ -349,7 +348,7 @@ def run_smoke_check(
     print(f"[INFO] Executing smoke & E2E verification against deployed preview: {url}")
 
     # 4. Fetch preview URL
-    status_code, headers, body, err = fetch_preview_with_retry(
+    status_code, _headers, body, err = fetch_preview_with_retry(
         url,
         timeout=timeout,
         max_retries=max_retries,
