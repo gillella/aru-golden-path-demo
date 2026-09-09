@@ -4,6 +4,7 @@ import contextlib
 import io
 import json
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -78,6 +79,38 @@ class PreviewBuildTests(unittest.TestCase):
 
 
 class PreviewSmokeTests(unittest.TestCase):
+    def test_scenario_read_and_parse_failures_remain_structured(self):
+        malformed = {
+            "invalid JSON": b"[",
+            "invalid UTF-8": b"\xff",
+            "excessive nesting": b"[" * (sys.getrecursionlimit() + 1) + b"]" * (sys.getrecursionlimit() + 1),
+        }
+        digit_limit = sys.get_int_max_str_digits()
+        if digit_limit:
+            malformed["oversized integer"] = b"9" * (digit_limit + 1)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "smoke.json"
+            for label, contents in malformed.items():
+                with self.subTest(label=label):
+                    path.write_bytes(contents)
+                    valid, scenarios, reason = smoke_preview.load_and_validate_scenarios(str(path))
+                    self.assertFalse(valid)
+                    self.assertIsNone(scenarios)
+                    self.assertTrue(reason)
+            with patch("builtins.open", side_effect=OSError("read failed")):
+                valid, scenarios, reason = smoke_preview.load_and_validate_scenarios(str(path))
+            self.assertFalse(valid)
+            self.assertIsNone(scenarios)
+            self.assertIn("read failed", reason)
+            # Exercise resource limits without exhausting the test process.
+            for error in (RecursionError("nesting limit"), MemoryError("input too large")):
+                with self.subTest(error=type(error).__name__):
+                    with patch.object(smoke_preview.json, "load", side_effect=error):
+                        valid, scenarios, reason = smoke_preview.load_and_validate_scenarios(str(path))
+                    self.assertFalse(valid)
+                    self.assertIsNone(scenarios)
+                    self.assertIn(str(error), reason)
+
     def test_valid_html_satisfies_repository_scenarios(self):
         scenarios_path = Path(__file__).resolve().parents[1] / ".github/scenarios/smoke.json"
         valid, scenarios, reason = smoke_preview.load_and_validate_scenarios(str(scenarios_path))

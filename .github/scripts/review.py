@@ -20,7 +20,7 @@ def main():
         sys.exit(0)
 
     # Perform diff analysis when provider key is present
-    res = subprocess.run(["git", "diff", "origin/main...HEAD"], capture_output=True, text=True)
+    res = subprocess.run(["git", "diff", "origin/main...HEAD"], capture_output=True, text=True, check=False)
     if res.returncode != 0:
         print(f"::error:: Failed to capture git diff for model review: {res.stderr}", file=sys.stderr)
         sys.exit(1)
