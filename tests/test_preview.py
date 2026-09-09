@@ -11,7 +11,6 @@ from unittest.mock import patch
 
 from scripts import build_preview, smoke_preview
 
-
 HTML = "<!doctype html><html><title>Demo</title><body>Hello</body></html>"
 
 
@@ -26,12 +25,14 @@ class PreviewBuildTests(unittest.TestCase):
 
     def build(self, destination=None):
         # Verification must not publish output values into a surrounding job.
-        with patch.dict(os.environ, {"GITHUB_OUTPUT": ""}):
-            with contextlib.redirect_stdout(io.StringIO()):
-                with contextlib.redirect_stderr(io.StringIO()):
-                    return build_preview.assemble_preview_artifact(
-                        str(self.root), str(destination or self.root / "dist")
-                    )
+        with (
+            patch.dict(os.environ, {"GITHUB_OUTPUT": ""}),
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            return build_preview.assemble_preview_artifact(
+                str(self.root), str(destination or self.root / "dist")
+            )
 
     def test_copies_only_public_files_into_canonical_dist(self):
         (self.public / "style.css").write_text("body { color: blue; }", encoding="utf-8")
