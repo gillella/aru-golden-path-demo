@@ -1,50 +1,67 @@
 # aru-golden-path-demo
 
-Public one-page product used to walk Aru_Agentic_SDLC from idea to preview.
+A small public reference consumer for **Aru Code Factory**: a landing page,
+product checks, and an issue-to-merge workflow on the
+[project board](https://github.com/users/gillella/projects/6).
 
-The factory is **not** in this repository. `AGENTS.md` points at `$ARU_SDLC_HOME`.
-Do not copy playbook `skills/` or lifecycle helpers (`claim_issue.py`, `merge_pr.py`,
-and the rest) into this tree.
+## Factory revision
 
-## Pin the playbook
-
-S1.4 consumer pinning is `ARU_SDLC_REF`. This demo was written against playbook
-commit `8d0513b` (2026-08-18 `origin/main`, includes the trust-boundary work).
+The consumer governance files were reconciled with Factory commit
+`ea0101b34353f451dcf2ced455894df965b5137a` on September 10, 2026.
 
 ```bash
 export ARU_SDLC_HOME=/path/to/Aru_Agentic_SDLC
-export ARU_SDLC_REF=8d0513b
-"$ARU_SDLC_HOME/scripts/install_cursor_integration.sh"
+export ARU_SDLC_REF=ea0101b34353f451dcf2ced455894df965b5137a
 ```
 
-Prefer an annotated `ckpt/<PR>-<sha7>` tag when you want the exact merge that
-produced a checkpoint. Discover tags with `git -C "$ARU_SDLC_HOME" tag -l 'ckpt/*'`.
-Do not pin the moving branch name `main` if you want a frozen walk.
+Use a separate Factory checkout at that immutable revision. Setting these
+variables does not check out the revision, update this repository's copied
+files, install a shared Hermes adapter, or start agents. Follow the pinned
+Factory [operations guide](https://github.com/gillella/Aru_Agentic_SDLC/blob/ea0101b34353f451dcf2ced455894df965b5137a/docs/OPERATIONS.md)
+when installing or reconciling an existing consumer.
 
-## Runnable surface (before Pages)
+Factory lifecycle helpers and skills remain under `$ARU_SDLC_HOME`; this
+repository owns its application, tests, and deployment workflows.
+
+## Build and check the page
+
+From this repository's root, using Python 3.12:
 
 ```bash
+bash .aru/verify-project.sh
 python3 scripts/build_preview.py
-# then open dist/index.html
-# or open public/index.html directly
+test -f dist/index.html
 ```
 
-`scripts/build_preview.py` and `scripts/smoke_preview.py` are the consumer
-preview pair written by `init_project.py` so GitHub Actions can assemble a
-static artifact. They are not a second factory.
+The build copies the public site into `dist/` and rejects unsafe source or output
+paths. Open `dist/index.html` to inspect it locally. The product tests exercise
+build containment and HTML acceptance. The governed PR workflow also runs
+`.aru/verify.sh` on this repository's assigned `self-hosted-mac` runner.
 
-## Happy path
+## Development workflow
 
-Board: [aru-golden-path-demo Board](https://github.com/users/gillella/projects/6)
+1. Shape an issue with acceptance criteria, dependencies, and a `touches:` scope.
+2. Claim Ready work and implement it in an isolated worktree.
+3. Open a PR linked to the issue and pass current-head verification.
+4. Resolve findings and obtain a distinct authoritative review when required by risk.
+5. Merge through the pinned Factory helper with `--pr <number>` and
+   `--expected-head <40-character-PR-head>`. Confirm merge and board close-out.
+6. Deploy through this consumer's release process, with a selected artifact,
+   operator approval, health checks, and a retained rollback artifact.
 
-1. File an idea (`$ARU_SDLC_HOME/skills/idea-to-prd/SKILL.md`). Seed idea: [#1](https://github.com/gillella/aru-golden-path-demo/issues/1).
-2. Decompose an approved PRD (`prd-to-issues`). Seed implementation: [#2](https://github.com/gillella/aru-golden-path-demo/issues/2).
-3. `python3 "$ARU_SDLC_HOME/scripts/fetch_next_work.py" --agent <id> --family <family> --claim`
-4. Implement in `.worktrees/`. Open a PR with `create_pr.py` (`Closes #<n>`).
-5. A **distinct** agent reviews. Authors never self-review.
-6. `python3 "$ARU_SDLC_HOME/scripts/merge_pr.py" --pr <ID>`
-7. `python3 "$ARU_SDLC_HOME/scripts/deploy_preview.py" --commit <40-char-sha> --issue <N>`
+The optional external Hermes Driver schedules bounded development actions.
+Enabling it does not deploy this application.
 
-Every step leaves an issue or PR on this board. The first landing-page PR is
-the seed walk; live Pages URL is recorded on the originating issue after a
-peer review and gated merge.
+## Deployment status and remaining work
+
+The existing `Deploy Preview` workflow targets GitHub Pages. Source and CI
+success do not establish that a site is deployed. Before relying on the demo as
+a deployment reference, configure the Pages target and approval boundary, bind
+the served files to an immutable artifact, and demonstrate deployment, health
+verification, and restoration of a previously deployed artifact.
+
+The `Record Governed Promotion` workflow is an audit-only record; its successful
+status is not proof of deployment. Factory's
+[deployment guidance](https://github.com/gillella/Aru_Agentic_SDLC/blob/ea0101b34353f451dcf2ced455894df965b5137a/integrations/deployment/README.md)
+defines the evidence the consumer must produce. Deployment and rollback remain
+unproven until an operator records successful live runs.

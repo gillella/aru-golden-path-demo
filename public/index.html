@@ -27,12 +27,12 @@
   </p>
   <p>Happy path on this repo's board:</p>
   <ol>
-    <li>File an idea, then a PRD, then shaped issues.</li>
+    <li>Shape an issue with acceptance criteria and a clear change scope.</li>
     <li>Implement in a worktree.</li>
-    <li>A distinct agent reviews.</li>
-    <li><code>merge_pr.py</code> lands the PR.</li>
-    <li><code>deploy_preview.py</code> publishes this page.</li>
+    <li>Pass verification and obtain independent review when required by risk.</li>
+    <li><code>merge_pr.py --expected-head</code> lands the verified PR.</li>
+    <li>The consumer deploys an approved artifact and verifies health and rollback.</li>
   </ol>
-  <p>Walk-through: see the README in this repository.</p>
+  <p>Walk-through and deployment readiness: see the README in this repository.</p>
 </body>
 </html>

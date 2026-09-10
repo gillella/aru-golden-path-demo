@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """check_touches.py - Fail-closed enforcement of PR file modifications against issue declared touches:"""
 
-import fnmatch
-import json
 import os
 import re
 import subprocess
@@ -10,7 +8,7 @@ import sys
 
 
 def run_cmd(cmd):
-    res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     return res.returncode, res.stdout.strip(), res.stderr.strip()
 
 

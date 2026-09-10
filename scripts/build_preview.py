@@ -6,8 +6,6 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Optional, Tuple
-
 
 PUBLIC_EXTENSIONS = {
     ".avif", ".css", ".gif", ".htm", ".html", ".ico", ".jpeg", ".jpg",
@@ -93,7 +91,7 @@ def _copy_public_tree(source: Path, destination: Path) -> None:
 APP_CANDIDATE_DIRS = ["sdlc_flow_visualizer", "public", "dist", "build", "web", "frontend", "site"]
 
 
-def find_preview_source(root_dir: str) -> Optional[Tuple[str, str]]:
+def find_preview_source(root_dir: str) -> tuple[str, str] | None:
     """Return a non-symlink static source rooted inside ``root_dir``."""
     lexical_root = _absolute_lexical(root_dir)
     if lexical_root.is_symlink() or not lexical_root.is_dir():
@@ -122,7 +120,7 @@ def find_preview_source(root_dir: str) -> Optional[Tuple[str, str]]:
     return None
 
 
-def detect_surface_classification(root_dir: str) -> Tuple[str, Optional[Tuple[str, str]]]:
+def detect_surface_classification(root_dir: str) -> tuple[str, tuple[str, str] | None]:
     """Distinguish valid runnable products, broken runnable products (missing entrypoint), and libraries."""
     lexical_root = _absolute_lexical(root_dir)
     if lexical_root.is_symlink() or not lexical_root.is_dir():

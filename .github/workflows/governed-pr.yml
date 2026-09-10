@@ -1,0 +1,57 @@
+name: Aru governed pull request
+# aru-runner-profile: self-hosted-mac
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: aru-governed-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  governed-pr:
+    name: aru-governed-pr
+    if: ${{ github.event_name == 'pull_request' && !github.event.pull_request.draft }}
+    runs-on: [self-hosted, macOS, ARM64, aru-ci]
+    timeout-minutes: 20
+    steps:
+      - name: Validate self-hosted runner trust boundary
+        env:
+          ARU_EVENT_NAME: ${{ github.event_name }}
+          ARU_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          ARU_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [[ "$ARU_EVENT_NAME" != "pull_request" || -z "$ARU_HEAD_REPOSITORY" || "$ARU_HEAD_REPOSITORY" != "$ARU_REPOSITORY" ]]; then
+            echo "::error::Only verified pull_request events from this repository may execute on persistent self-hosted runners."
+            exit 1
+          fi
+          command -v python3
+          python3 -c 'import sys; assert sys.version_info >= (3, 11), sys.version'
+          python3 -m pip --version
+          command -v gh
+
+      - name: Check out the exact pull-request head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run repository-owned affected verification
+        run: bash .aru/verify.sh
+
+      - name: Enforce the issue write boundary against the actual diff
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARU_PR_NUMBER: ${{ github.event.pull_request.number }}
+          ARU_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: >-
+          python3 .aru/hooks/enforce_touches.py --pr "$ARU_PR_NUMBER"
+          --expected-head "$ARU_EXPECTED_HEAD"

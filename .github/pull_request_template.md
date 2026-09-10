@@ -1,18 +1,19 @@
-## What
+## Summary
 
-<!-- One paragraph. -->
+Create this PR with `$ARU_SDLC_HOME/scripts/create_pr.py --issue N`.
+The helper adds `Closes #N` automatically; omit closing directives from the
+body supplied to the helper.
 
-## Verification
+## Governed verification
 
-<!-- The command you ran and its result. Required by the governance directive. -->
+The required `aru-governed-pr` server check runs this repository's
+`.aru/verify.sh` on the exact PR head and validates the linked issue's
+`touches:` declaration against the actual diff.
 
-```
-```
+Optional local preflight or audit evidence:
 
-## Checklist
+- <!-- command and result, if useful -->
 
-- [ ] Local test suite passes
-- [ ] No cross-module boundary violations introduced
-- [ ] Documentation updated if behaviour changed
+## Net surface change
 
-Closes #
+Production LOC; test LOC; active docs; commands; skills; state stores:
