@@ -15,7 +15,9 @@ This repository is scaffolded for the `self-hosted-mac` runner profile,
 so GitHub Actions orchestrates the check and operator-owned `[self-hosted, macOS, ARM64, aru-ci]` Macs supply the
 compute. It runs this repository's `.aru/verify.sh` and validates `touches:`
 against the actual diff. Never fall back to a GitHub-hosted runner; an offline pool leaves merge blocked. `.aru/verify.sh` refuses a workflow
-whose declared profile and `runs-on:` disagree.
+whose declared profile and `runs-on:` disagree. The framework verifier invokes
+the required executable `.aru/verify-project.sh`; configure its failing starter
+with meaningful product checks and preserve existing consumer verification on updates.
 
 Configured merge queues and pending queue/auto-merge requests are unsupported
 and refused before submission. Verification accepts same-repository PR heads
