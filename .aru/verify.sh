@@ -250,10 +250,12 @@ if [ -f "${governance_flag}" ]; then
   echo "no vendored Factory lifecycle scripts or skills"
 fi
 
-# The demo owns two standard-library preview helpers. These offline tests
-# validate containment and HTML acceptance without starting or deploying a site.
-section "Preview build and smoke checks"
-python3 -m unittest discover -s tests -p 'test_*.py' -v
+section "Consumer verification"
+[ -f .aru/verify-project.sh ] && [ -x .aru/verify-project.sh ] \
+  || fail ".aru/verify-project.sh must exist and be executable; preserve the project's checks when upgrading"
+if ! ./.aru/verify-project.sh; then
+  fail "consumer verification failed"
+fi
 
 section "Result"
 echo "proportional verification passed for ${scope}"
