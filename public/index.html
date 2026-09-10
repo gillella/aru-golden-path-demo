@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aru golden-path demo</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      margin: 0 auto;
+      max-width: 40rem;
+      padding: 2rem 1.25rem 4rem;
+      line-height: 1.5;
+    }
+    h1 { font-size: 1.75rem; }
+    ol { padding-left: 1.25rem; }
+    code { font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>Aru golden-path demo</h1>
+  <p>
+    This public page is the runnable surface for
+    <a href="https://github.com/gillella/aru-golden-path-demo">gillella/aru-golden-path-demo</a>.
+    The factory lives in <code>$ARU_SDLC_HOME</code>; this repo does not vendor playbook skills or lifecycle helpers.
+  </p>
+  <p>Happy path on this repo's board:</p>
+  <ol>
+    <li>Shape an issue with acceptance criteria and a clear change scope.</li>
+    <li>Implement in a worktree.</li>
+    <li>Pass verification and obtain independent review when required by risk.</li>
+    <li><code>merge_pr.py --expected-head</code> lands the verified PR.</li>
+    <li>The consumer deploys an approved artifact and verifies health and rollback.</li>
+  </ol>
+  <p>Walk-through and deployment readiness: see the README in this repository.</p>
+</body>
+</html>
