@@ -1,8 +1,6 @@
 ## Summary
 
-Create this PR with `$ARU_SDLC_HOME/scripts/create_pr.py --issue N`.
-The helper adds `Closes #N` automatically; omit closing directives from the
-body supplied to the helper.
+Closes #<!-- issue -->
 
 ## Governed verification
 
