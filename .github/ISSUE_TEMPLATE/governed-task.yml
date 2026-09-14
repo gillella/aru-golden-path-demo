@@ -1,7 +1,6 @@
 name: Governed task
 description: Work admitted to the Aru lifecycle
 labels: ["status:backlog"]
-projects: ["gillella/6"]
 body:
   - type: textarea
     id: acceptance
