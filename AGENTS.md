@@ -13,9 +13,12 @@ than the author, and merge through `merge_pr.py --expected-head`.
 
 This repository is scaffolded for the `self-hosted-mac` runner profile,
 so GitHub Actions orchestrates the check and operator-owned `[self-hosted, macOS, ARM64, aru-ci]` Macs supply the
-compute. It runs this repository's `.aru/verify.sh` and validates `touches:`
-against the actual diff. Never fall back to a GitHub-hosted runner; an offline pool leaves merge blocked. `.aru/verify.sh` refuses a workflow
-whose declared profile and `runs-on:` disagree. The framework verifier invokes
+compute. Its two workflows are stubs that call the Factory's composite actions at
+a pinned release: the Factory runs its own verifier against this exact head and
+validates `touches:` against the actual diff, so no verification logic is copied
+into this repository and a pull request cannot rewrite the script that judges it.
+Never fall back to a GitHub-hosted runner; an offline pool leaves merge blocked. The Factory's verifier refuses a stub that calls another
+repository, or whose declared profile and `runs-on:` disagree. The framework verifier invokes
 the required executable `.aru/verify-project.sh`; configure its failing starter
 with meaningful product checks and preserve existing consumer verification on updates.
 
